@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>닌자 번개 게임</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+    }
+    canvas {
+      display: none;
+      margin: 0 auto;
+      background: #000;
+    }
+    video {
+      display: block;
+      margin: 0 auto;
+    }
+    #controls {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      gap: 20px;
+      z-index: 10;
+    }
+    .control-btn {
+      padding: 15px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: #444;
+      color: white;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <video id="introVideo" width="480" height="640" autoplay playsinline>
+    <source src="video/ninjagameintro.mp4" type="video/mp4">
+    브라우저가 비디오를 지원하지 않습니다.
+  </video>
+
+  <canvas id="gameCanvas" width="480" height="640"></canvas>
+
+  <div id="controls">
+    <button class="control-btn" id="leftBtn">◀️</button>
+    <button class="control-btn" id="fireBtn">⚡</button>
+    <button class="control-btn" id="rightBtn">▶️</button>
+  </div>
+
+  <audio id="bgm" src="audio/bgm.mp3" loop></audio>
+
+  <script>
+    const isMobile = /iPhone|Android|iPad|Mobile/i.test(navigator.userAgent);
+    const video = document.getElementById("introVideo");
+    const canvas = document.getElementById("gameCanvas");
+    const controls = document.getElementById("controls");
+
+    video.onended = () => {
+      video.style.display = "none";
+      canvas.style.display = "block";
+      if (isMobile) controls.style.display = "flex";
+    };
+
+    // 음악은 스페이스 누르면 재생
+    document.body.addEventListener("keydown", (e) => {
+      if (e.key === " ") document.getElementById("bgm").play();
+    });
+
+    // PC/모바일 분기 로딩
+    const script = document.createElement("script");
+    script.src = isMobile ? "js/game_mobile.js" : "js/game.js";
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>
